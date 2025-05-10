@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>تواصل معنا</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <img src="Y.G.jpg" alt="شعار الشركة" class="logo">
+    <h1>تواصل معنا</h1>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="products.html">المنتجات</a>
+      <a href="cart.html">السلة</a>
+      <a href="about.html">من نحن</a>
+      <a href="contact.html">تواصل معنا</a>
+    </nav>
+  </header>
+
+  <main class="center-content">
+    <p>راسلونا عبر: <a href="mailto:ghaazaallll2025@gmail.com">ghaazaallll2025@gmail.com</a></p>
+    <p>تابعونا على الإنستغرام: <a href="https://www.instagram.com/ghaazaallll2025?igsh=bDJocnB3cjZ5Ym0w" target="_blank">@GAZAL</a></p>
+
+    <h3>اترك تعليقك</h3>
+    <input type="text" id="commentName" placeholder="اسمك" />
+    <textarea id="commentText" placeholder="اكتب تعليقك هنا..."></textarea>
+    <button onclick="submitComment()">إرسال</button>
+  </main>
+
+  <footer>
+    <p>&copy; غزّل</p>
+  </footer>
+
+  <script>
+    function submitComment() {
+      const name = document.getElementById('commentName').value.trim();
+      const text = document.getElementById('commentText').value.trim();
+
+      if (name && text) {
+        const comments = JSON.parse(localStorage.getItem('comments')) || [];
+        comments.push({ name, message: text });
+        localStorage.setItem('comments', JSON.stringify(comments));
+        alert("تم حفظ تعليقك!");
+        document.getElementById('commentName').value = '';
+        document.getElementById('commentText').value = '';
+      }
+    }
+  </script>
+</body>
+</html>

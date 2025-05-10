@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>المنتجات</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <img src="Y.G.jpg" alt="شعار الشركة" class="logo">
+    <h1>منتجاتنا</h1>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="products.html">المنتجات</a>
+      <a href="cart.html">السلة</a>
+      <a href="about.html">من نحن</a>
+      <a href="contact.html">تواصل معنا</a>
+    </nav>
+  </header>
+
+  <main class="center-content">
+    <section>
+      <h2>إضافة منتج جديد</h2>
+      <input type="text" id="productName" placeholder="اسم المنتج" />
+      <input type="number" id="productPrice" placeholder="السعر" />
+      <input type="file" id="productImage" accept="image/*" />
+      <button onclick="addProduct()">إضافة</button>
+    </section>
+
+    <section>
+      <h2>قائمة المنتجات</h2>
+      <div id="productList"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; غزّل</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

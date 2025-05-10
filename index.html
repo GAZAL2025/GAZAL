@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <title>الرئيسية</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <img src="Y.G.jpg" alt="شعار الشركة" class="logo">
+    <h1>غزّل</h1>
+    <nav>
+      <a href="index.html">الرئيسية</a>
+      <a href="products.html">المنتجات</a>
+      <a href="cart.html">السلة</a>
+      <a href="about.html">من نحن</a>
+      <a href="contact.html">تواصل معنا</a>
+    </nav>
+  </header>
+
+  <main class="center-content">
+    <section>
+      <h2>تعليقات العملاء</h2>
+      <div id="commentsContainer"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; غزّل</p>
+  </footer>
+
+  <script>
+    const comments = JSON.parse(localStorage.getItem('comments')) || [];
+    const container = document.getElementById('commentsContainer');
+
+    comments.forEach(({ name, message }) => {
+      const div = document.createElement('div');
+      div.className = 'comment-box';
+      div.innerHTML = `<strong>${name}</strong><p>${message}</p>`;
+      container.appendChild(div);
+    });
+  </script>
+</body>
+</html>

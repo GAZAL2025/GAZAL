@@ -1,0 +1,128 @@
+/* إعدادات أساسية */
+body {
+  font-family: 'Tahoma', sans-serif;
+  direction: rtl;
+  margin: 0;
+  padding: 0;
+  background-color: #f7f7f7;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header, footer {
+  background-color: #333;
+  color: white;
+  padding: 15px;
+  text-align: center;
+}
+
+nav {
+  margin-top: 10px;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+main {
+  flex: 1;
+  padding: 20px;
+}
+
+/* المنتجات */
+.product, .cart-item {
+  background-color: white;
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin: 10px;
+  border-radius: 8px;
+  width: 250px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.product img, .cart-item img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.products-grid, #cartItems {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 15px;
+}
+
+/* نموذج إضافة منتج */
+form {
+  margin-bottom: 30px;
+  background: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+form input, form button {
+  margin-top: 10px;
+  padding: 10px;
+  font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+form button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: #45a049;
+}
+
+/* تذييل */
+footer {
+  margin-top: auto;
+}
+
+/* التعليقات */
+.comment-box {
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 8px;
+  margin: 10px;
+  width: calc(50% - 20px);
+  display: inline-block;
+  vertical-align: top;
+  box-sizing: border-box;
+}
+
+/* للهواتف */
+@media (max-width: 600px) {
+  .product, .cart-item, .comment-box {
+    width: 100%;
+  }
+
+  nav a {
+    display: block;
+    margin: 5px 0;
+  }
+}
+.center-content {
+  display: flex;
+  justify-content: center; /* توسيط أفقي */
+  align-items: center;     /* توسيط عمودي */
+  flex-direction: column;
+  text-align: center;
+}
+.logo {
+  height: 50px;
+  position: absolute;
+  left: 20px;
+  top: 15px;
+}
