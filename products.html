@@ -25,14 +25,14 @@
     
     
         <h1>إضافة منتج جديد</h1>
-        <input type="text" id="productName" placeholder="اسم المنتج">
-        <input type="number" id="productPrice" placeholder="سعر المنتج">
-        <input type="file" id="productImage">
-        <button onclick="addProduct()">إضافة المنتج</button>
-    
-        <h2>قائمة المنتجات</h2>
-        <div id="productList" class="products"></div>
+        <form onsubmit="event.preventDefault(); addProduct();">
+          <input type="text" id="productName" placeholder="اسم المنتج">
+          <input type="number" id="productPrice" placeholder="السعر">
+          <input type="file" id="productImage" accept="image/*">
+          <button onclick="addProduct()">إضافة المنتج</button>
+        </form>
       
+        <div id="productList" class="products-grid"></div>
   </main>
 
   <footer>
