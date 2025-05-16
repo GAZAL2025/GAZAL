@@ -1,6 +1,9 @@
-// ربط Firebase
+// استيراد Firebase SDK اللازمة
 import { initializeApp } from "firebase/app";
+import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
+// إعداد Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyD7H0KEqtBx4TFQX80jFbYbnoiN8HBOUD0",
   authDomain: "ghazal-2025.firebaseapp.com",
@@ -11,26 +14,25 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const storage = getStorage(app);
 
-// تحميل المنتجات والسلة من localStorage
-let products = JSON.parse(localStorage.getItem('products')) || [];
+let products = []; // سنملأها من Firestore
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-function saveProducts() {
-  localStorage.setItem('products', JSON.stringify(products));
-}
-
-function saveCart() {
-  localStorage.setItem('cart', JSON.stringify(cart));
-}
-
-// عرض المنتجات
-function displayProducts() {
+// تحميل المنتجات من Firestore وعرضها
+async function loadProducts() {
   const container = document.getElementById('productList');
   if (!container) return;
 
   container.innerHTML = '';
-  products.forEach(product => {
+  products = []; // تفريغ القائمة قبل التعبئة
+
+  const querySnapshot = await getDocs(collection(db, "products"));
+  querySnapshot.forEach(docSnap => {
+    const product = { id: docSnap.id, ...docSnap.data() };
+    products.push(product);
+
     const div = document.createElement('div');
     div.className = 'product';
     div.innerHTML = `
@@ -44,8 +46,8 @@ function displayProducts() {
   });
 }
 
-// إضافة منتج جديد
-function addProduct() {
+// إضافة منتج جديد مع رفع صورة إلى Firebase Storage
+async function addProduct() {
   const name = document.getElementById('productName').value.trim();
   const price = parseFloat(document.getElementById('productPrice').value);
   const imageInput = document.getElementById('productImage');
@@ -56,35 +58,51 @@ function addProduct() {
     return;
   }
 
-  const reader = new FileReader();
-  reader.onload = function (e) {
-    const product = {
-      id: Date.now().toString(),
+  try {
+    // رفع الصورة إلى Storage
+    const storageRef = ref(storage, `product_images/${Date.now()}_${file.name}`);
+    await uploadBytes(storageRef, file);
+    const imageUrl = await getDownloadURL(storageRef);
+
+    // إضافة المنتج إلى Firestore
+    const docRef = await addDoc(collection(db, "products"), {
       name,
       price,
-      image: e.target.result
-    };
-    products.push(product);
-    saveProducts();
-    displayProducts();
+      image: imageUrl
+    });
+
+    alert("تم إضافة المنتج بنجاح!");
+    // إعادة تحميل المنتجات
+    loadProducts();
+
+    // إعادة تعيين الحقول
     document.getElementById('productName').value = '';
     document.getElementById('productPrice').value = '';
     imageInput.value = '';
-  };
-  reader.readAsDataURL(file);
+
+  } catch (error) {
+    alert("حدث خطأ أثناء إضافة المنتج: " + error.message);
+  }
 }
 
-// حذف منتج
-function deleteProduct(productId) {
-  products = products.filter(p => p.id !== productId);
-  cart = cart.filter(p => p.id !== productId);
-  saveProducts();
-  saveCart();
-  displayProducts();
-  displayCartItems();
+// حذف المنتج من Firestore
+async function deleteProduct(productId) {
+  try {
+    await deleteDoc(doc(db, "products", productId));
+
+    // حذف المنتج من السلة إن كان موجود
+    cart = cart.filter(p => p.id !== productId);
+    saveCart();
+
+    // إعادة تحميل المنتجات والسلة
+    loadProducts();
+    displayCartItems();
+  } catch (error) {
+    alert("خطأ في حذف المنتج: " + error.message);
+  }
 }
 
-// إضافة منتج للسلة
+// إضافة منتج للسلة (محليًا فقط)
 function addToCart(productId) {
   const product = products.find(p => p.id === productId);
   if (!product) return;
@@ -133,9 +151,13 @@ function removeFromCart(productId) {
   displayCartItems();
 }
 
-// العد التنازلي
-const eventDate = new Date("2025-05-21T10:00:00");
+// حفظ السلة في localStorage
+function saveCart() {
+  localStorage.setItem('cart', JSON.stringify(cart));
+}
 
+// العد التنازلي (كما في السابق)
+const eventDate = new Date("2025-05-21T10:00:00");
 function updateCountdown() {
   const countdownEl = document.getElementById("countdown");
   if (!countdownEl) return;
@@ -166,7 +188,7 @@ function toggleMenu() {
 
 // تحميل تلقائي عند فتح الصفحة
 document.addEventListener('DOMContentLoaded', () => {
-  displayProducts();
+  loadProducts();
   displayCartItems();
 
   if (document.getElementById('countdown')) {
