@@ -15,21 +15,50 @@ header, footer {
   color: white;
   padding: 15px;
   text-align: center;
+  position: relative; /* مهم للشعار */
 }
 
+.logo {
+  height: 50px;
+  position: absolute;
+  left: 20px;
+  top: 15px;
+}
+
+/* شريط التنقل */
 nav {
   margin-top: 10px;
 }
 
-nav a {
-  color: white;
-  text-decoration: none;
-  margin: 0 10px;
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
 }
 
-main {
-  flex: 1;
-  padding: 20px;
+nav ul li {
+  display: inline-block;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  padding: 8px 12px;
+  display: block;
+}
+
+/* زر الهامبرجر مخفي بشكل افتراضي */
+.menu-toggle {
+  display: none;
+  position: absolute;
+  left: 20px;
+  top: 18px;
+  cursor: pointer;
+  font-size: 24px;
+  color: white;
 }
 
 /* المنتجات */
@@ -103,26 +132,35 @@ footer {
 }
 
 /* للهواتف */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+  nav ul {
+    display: none;
+    flex-direction: column;
+    background-color: #333;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 60px;
+  }
+
+  nav ul.showing {
+    display: flex;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+
   .product, .cart-item, .comment-box {
     width: 100%;
   }
-
-  nav a {
-    display: block;
-    margin: 5px 0;
-  }
 }
+
+/* توسيط المحتوى */
 .center-content {
   display: flex;
   justify-content: center; /* توسيط أفقي */
   align-items: center;     /* توسيط عمودي */
   flex-direction: column;
   text-align: center;
-}
-.logo {
-  height: 50px;
-  position: absolute;
-  left: 20px;
-  top: 15px;
 }
