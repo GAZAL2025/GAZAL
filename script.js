@@ -1,4 +1,18 @@
-// تحميل المنتجات من localStorage أو إنشاء مصفوفة جديدة
+// ربط Firebase
+import { initializeApp } from "firebase/app";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD7H0KEqtBx4TFQX80jFbYbnoiN8HBOUD0",
+  authDomain: "ghazal-2025.firebaseapp.com",
+  projectId: "ghazal-2025",
+  storageBucket: "ghazal-2025.appspot.com",
+  messagingSenderId: "991237133972",
+  appId: "1:991237133972:web:ee881d54f94e7d20690681"
+};
+
+const app = initializeApp(firebaseConfig);
+
+// تحميل المنتجات والسلة من localStorage
 let products = JSON.parse(localStorage.getItem('products')) || [];
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
@@ -10,13 +24,12 @@ function saveCart() {
   localStorage.setItem('cart', JSON.stringify(cart));
 }
 
-// عرض المنتجات في صفحة المنتجات
+// عرض المنتجات
 function displayProducts() {
   const container = document.getElementById('productList');
   if (!container) return;
 
   container.innerHTML = '';
-
   products.forEach(product => {
     const div = document.createElement('div');
     div.className = 'product';
@@ -61,7 +74,7 @@ function addProduct() {
   reader.readAsDataURL(file);
 }
 
-// حذف منتج من صفحة المنتجات (ومن السلة إذا كان موجودًا)
+// حذف منتج
 function deleteProduct(productId) {
   products = products.filter(p => p.id !== productId);
   cart = cart.filter(p => p.id !== productId);
@@ -71,7 +84,7 @@ function deleteProduct(productId) {
   displayCartItems();
 }
 
-// إضافة إلى السلة
+// إضافة منتج للسلة
 function addToCart(productId) {
   const product = products.find(p => p.id === productId);
   if (!product) return;
@@ -113,15 +126,51 @@ function displayCartItems() {
   totalEl.innerText = `الإجمالي: ${total} ريال`;
 }
 
-// حذف منتج من السلة فقط
+// إزالة منتج من السلة
 function removeFromCart(productId) {
   cart = cart.filter(p => p.id !== productId);
   saveCart();
   displayCartItems();
 }
 
-// عرض البيانات عند تحميل الصفحات
+// العد التنازلي
+const eventDate = new Date("2025-05-21T10:00:00");
+
+function updateCountdown() {
+  const countdownEl = document.getElementById("countdown");
+  if (!countdownEl) return;
+
+  const now = new Date();
+  const diff = eventDate - now;
+
+  if (diff <= 0) {
+    countdownEl.innerText = "لقد بدأ الحدث!";
+    return;
+  }
+
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+
+  countdownEl.innerText = `${days} يوم ${hours} ساعة ${minutes} دقيقة ${seconds} ثانية`;
+}
+
+// القائمة المنسدلة للهاتف
+function toggleMenu() {
+  const menu = document.getElementById("navMenu");
+  if (menu) {
+    menu.classList.toggle("show");
+  }
+}
+
+// تحميل تلقائي عند فتح الصفحة
 document.addEventListener('DOMContentLoaded', () => {
   displayProducts();
   displayCartItems();
+
+  if (document.getElementById('countdown')) {
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  }
 });
